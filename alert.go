@@ -55,6 +55,7 @@ type AlertRelativeTimeRange struct {
 
 type AlertModel struct {
 	RefID        string             `json:"refId,omitempty"`
+	QueryType    string             `json:"queryType,omitempty"`
 	Type         string             `json:"type,omitempty"`
 	Expr         string             `json:"expr,omitempty"`
 	Format       string             `json:"format,omitempty"`
@@ -67,6 +68,23 @@ type AlertModel struct {
 
 	// For Graphite
 	Target string `json:"target,omitempty"`
+
+	// For Stackdriver
+	MetricQuery *StackdriverAlertQuery `json:"metricQuery,omitempty"`
+}
+
+type StackdriverAlertQuery struct {
+	AlignOptions       []StackdriverAlignOptions `json:"alignOptions,omitempty"`
+	AliasBy            string                    `json:"aliasBy,omitempty"`
+	MetricType         string                    `json:"metricType,omitempty"`
+	MetricKind         string                    `json:"metricKind,omitempty"`
+	Filters            []string                  `json:"filters,omitempty"`
+	AlignmentPeriod    string                    `json:"alignmentPeriod,omitempty"`
+	CrossSeriesReducer string                    `json:"crossSeriesReducer,omitempty"`
+	PerSeriesAligner   string                    `json:"perSeriesAligner,omitempty"`
+	ValueType          string                    `json:"valueType,omitempty"`
+	Preprocessor       string                    `json:"preprocessor,omitempty"`
+	GroupBys           []string                  `json:"groupBys,omitempty"`
 }
 
 type AlertDatasourceRef struct {
