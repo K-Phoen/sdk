@@ -64,6 +64,9 @@ type AlertModel struct {
 	IntervalMs   int                `json:"intervalMs,omitempty"`
 	Hide         *bool              `json:"hide,omitempty"`
 	Conditions   []AlertCondition   `json:"conditions,omitempty"`
+
+	// For Graphite
+	Target string `json:"target,omitempty"`
 }
 
 type AlertDatasourceRef struct {
