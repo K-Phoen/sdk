@@ -423,27 +423,6 @@ type (
 
 // for a graph panel
 type (
-	// TODO look at schema versions carefully
-	// grid was obsoleted by xaxis and yaxes
-	grid struct { // nolint: unused,deadcode
-		LeftLogBase     *int     `json:"leftLogBase"`
-		LeftMax         *int     `json:"leftMax"`
-		LeftMin         *int     `json:"leftMin"`
-		RightLogBase    *int     `json:"rightLogBase"`
-		RightMax        *int     `json:"rightMax"`
-		RightMin        *int     `json:"rightMin"`
-		Threshold1      *float64 `json:"threshold1"`
-		Threshold1Color string   `json:"threshold1Color"`
-		Threshold2      *float64 `json:"threshold2"`
-		Threshold2Color string   `json:"threshold2Color"`
-		ThresholdLine   bool     `json:"thresholdLine"`
-	}
-	xaxis struct { //nolint:unused,deadcode
-		Mode   string      `json:"mode"`
-		Name   interface{} `json:"name"` // TODO what is this?
-		Show   bool        `json:"show"`
-		Values *[]string   `json:"values,omitempty"`
-	}
 	Axis struct {
 		Format   string       `json:"format"`
 		LogBase  int          `json:"logBase"`
