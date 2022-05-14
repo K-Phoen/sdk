@@ -228,29 +228,18 @@ type (
 		ValueName       string      `json:"valueName"`
 	}
 	StatPanel struct {
-		Colors          []string    `json:"colors"`
-		ColorValue      bool        `json:"colorValue"`
-		ColorBackground bool        `json:"colorBackground"`
-		Decimals        int         `json:"decimals"`
-		Format          string      `json:"format"`
-		Gauge           Gauge       `json:"gauge,omitempty"`
-		MappingType     *uint       `json:"mappingType,omitempty"`
-		MappingTypes    []*MapType  `json:"mappingTypes,omitempty"`
-		MaxDataPoints   *IntString  `json:"maxDataPoints,omitempty"`
-		NullPointMode   string      `json:"nullPointMode"`
-		Postfix         *string     `json:"postfix,omitempty"`
-		PostfixFontSize *string     `json:"postfixFontSize,omitempty"`
-		Prefix          *string     `json:"prefix,omitempty"`
-		PrefixFontSize  *string     `json:"prefixFontSize,omitempty"`
-		RangeMaps       []*RangeMap `json:"rangeMaps,omitempty"`
-		SparkLine       SparkLine   `json:"sparkline,omitempty"`
-		Targets         []Target    `json:"targets,omitempty"`
-		Thresholds      string      `json:"thresholds"`
-		ValueFontSize   string      `json:"valueFontSize"`
-		ValueMaps       []ValueMap  `json:"valueMaps"`
-		ValueName       string      `json:"valueName"`
-		Options         Options     `json:"options"`
-		FieldConfig     FieldConfig `json:"fieldConfig"`
+		Targets     []Target    `json:"targets,omitempty"`
+		Options     StatOptions `json:"options"`
+		FieldConfig FieldConfig `json:"fieldConfig"`
+	}
+	StatOptions struct {
+		Orientation   string        `json:"orientation"`
+		TextMode      string        `json:"textMode"`
+		ColorMode     string        `json:"colorMode"`
+		GraphMode     string        `json:"graphMode"`
+		JustifyMode   string        `json:"justifyMode"`
+		ReduceOptions ReduceOptions `json:"reduceOptions"`
+		Text          *TextOptions  `json:"text,omitempty"`
 	}
 	DashlistPanel struct {
 		Mode     string   `json:"mode"`
@@ -816,12 +805,20 @@ func NewStat(title string) *Panel {
 			Title:    title,
 			Type:     "stat",
 			Renderer: &render,
-			IsNew:    true},
+			IsNew:    true,
+		},
 		StatPanel: &StatPanel{
+			Options: StatOptions{
+				GraphMode: "none",
+				ReduceOptions: ReduceOptions{
+					Calcs: []string{"lastNotNull"},
+				},
+				Text: &TextOptions{},
+			},
 			FieldConfig: FieldConfig{
 				Defaults: FieldConfigDefaults{
 					Color: FieldConfigColor{
-						Mode:       "palette-classic",
+						Mode:       "thresholds",
 						FixedColor: "green",
 						SeriesBy:   "last",
 					},
