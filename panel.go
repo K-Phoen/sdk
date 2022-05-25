@@ -340,8 +340,8 @@ type (
 		Unit       string            `json:"unit"`
 		NoValue    string            `json:"noValue,omitempty"`
 		Decimals   *int              `json:"decimals,omitempty"`
-		Min        *int              `json:"min,omitempty"`
-		Max        *int              `json:"max,omitempty"`
+		Min        *float64          `json:"min,omitempty"`
+		Max        *float64          `json:"max,omitempty"`
 		Color      FieldConfigColor  `json:"color"`
 		Thresholds Thresholds        `json:"thresholds"`
 		Custom     FieldConfigCustom `json:"custom"`
