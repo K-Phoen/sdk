@@ -11,7 +11,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/rainycape/unidecode"
+	"github.com/gosimple/unidecode"
 )
 
 var (
@@ -28,7 +28,11 @@ var (
 	// after MaxLength.
 	MaxLength int
 
-	regexpNonAuthorizedChars = regexp.MustCompile("[^a-z0-9-_]")
+	// Lowercase defines if the resulting slug is transformed to lowercase.
+	// Default is true.
+	Lowercase = true
+
+	regexpNonAuthorizedChars = regexp.MustCompile("[^a-zA-Z0-9-_]")
 	regexpMultipleDashes     = regexp.MustCompile("-+")
 )
 
@@ -50,18 +54,43 @@ func MakeLang(s string, lang string) (slug string) {
 	slug = SubstituteRune(slug, CustomRuneSub)
 	slug = Substitute(slug, CustomSub)
 
-	// Process string with selected substitution language
-	switch lang {
-	case "de":
+	// Process string with selected substitution language.
+	// Catch ISO 3166-1, ISO 639-1:2002 and ISO 639-3:2007.
+	switch strings.ToLower(lang) {
+	case "cs", "ces":
+		slug = SubstituteRune(slug, csSub)
+	case "de", "deu":
 		slug = SubstituteRune(slug, deSub)
-	case "en":
+	case "en", "eng":
 		slug = SubstituteRune(slug, enSub)
-	case "pl":
-		slug = SubstituteRune(slug, plSub)
-	case "es":
+	case "es", "spa":
 		slug = SubstituteRune(slug, esSub)
-	case "gr":
+	case "fi", "fin":
+		slug = SubstituteRune(slug, fiSub)
+	case "fr", "fra":
+		slug = SubstituteRune(slug, frSub)
+	case "gr", "el", "ell":
 		slug = SubstituteRune(slug, grSub)
+	case "hu", "hun":
+		slug = SubstituteRune(slug, huSub)
+	case "id", "idn", "ind":
+		slug = SubstituteRune(slug, idSub)
+	case "kz", "kk", "kaz":
+		slug = SubstituteRune(slug, kkSub)
+	case "nb", "nob":
+		slug = SubstituteRune(slug, nbSub)
+	case "nl", "nld":
+		slug = SubstituteRune(slug, nlSub)
+	case "nn", "nno":
+		slug = SubstituteRune(slug, nnSub)
+	case "pl", "pol":
+		slug = SubstituteRune(slug, plSub)
+	case "sl", "slv":
+		slug = SubstituteRune(slug, slSub)
+	case "sv", "swe":
+		slug = SubstituteRune(slug, svSub)
+	case "tr", "tur":
+		slug = SubstituteRune(slug, trSub)
 	default: // fallback to "en" if lang not found
 		slug = SubstituteRune(slug, enSub)
 	}
@@ -69,12 +98,14 @@ func MakeLang(s string, lang string) (slug string) {
 	// Process all non ASCII symbols
 	slug = unidecode.Unidecode(slug)
 
-	slug = strings.ToLower(slug)
+	if Lowercase {
+		slug = strings.ToLower(slug)
+	}
 
 	// Process all remaining symbols
 	slug = regexpNonAuthorizedChars.ReplaceAllString(slug, "-")
 	slug = regexpMultipleDashes.ReplaceAllString(slug, "-")
-	slug = strings.Trim(slug, "-")
+	slug = strings.Trim(slug, "-_")
 
 	if MaxLength > 0 {
 		slug = smartTruncate(slug)
