@@ -10,14 +10,14 @@ jobs:
   lint:
     strategy:
       matrix:
-        go: [1.16, 1.17]
+        go: [1.16, 1.17, 1.18]
 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go }}
 
@@ -52,23 +52,17 @@ jobs:
           - 3000:3000
         options: >-
           -e GF_AUTH_ANONYMOUS_ENABLED=true
-      chromedp:
-        image: "chromedp/headless-shell:91.0.4472.69"
-        ports:
-          - 9222:9222
-        options: >-
-          --shm-size 2G
 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go }}
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.cache/go-build
