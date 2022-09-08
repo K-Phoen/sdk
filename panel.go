@@ -291,6 +291,7 @@ type (
 			Mode        string   `json:"mode"`
 		} `json:"color"`
 		DataFormat      string `json:"dataFormat"`
+		Calculate       bool   `json:"calculate"`
 		HideZeroBuckets bool   `json:"hideZeroBuckets"`
 		HighlightCards  bool   `json:"highlightCards"`
 		Legend          struct {
