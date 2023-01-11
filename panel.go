@@ -151,6 +151,15 @@ type (
 		Mode          string        `json:"mode"`
 		ReduceOptions ReduceOptions `json:"reduceOptions"`
 		Text          *TextOptions  `json:"text,omitempty"`
+		FilterValues  struct {
+			LessOrEqual *float64 `json:"le,omitempty"`
+		} `json:"filterValues,omitempty"`
+		Color struct {
+			Reverse bool     `json:"reverse,omitempty"`
+			Scheme  string   `json:"scheme,omitempty"`
+			Min     *float64 `json:"min,omitempty"`
+			Max     *float64 `json:"max,omitempty"`
+		} `json:"color,omitempty"`
 	}
 	TextOptions struct {
 		ValueSize int `json:"valueSize,omitempty"`
@@ -282,13 +291,10 @@ type (
 			CardRound   *float64 `json:"cardRound"`
 		} `json:"cards"`
 		Color struct {
-			CardColor   string   `json:"cardColor"`
-			ColorScale  string   `json:"colorScale"`
-			ColorScheme string   `json:"colorScheme"`
-			Exponent    float64  `json:"exponent"`
-			Min         *float64 `json:"min,omitempty"`
-			Max         *float64 `json:"max,omitempty"`
-			Mode        string   `json:"mode"`
+			CardColor  string  `json:"cardColor"`
+			ColorScale string  `json:"colorScale"`
+			Exponent   float64 `json:"exponent"`
+			Mode       string  `json:"mode"`
 		} `json:"color"`
 		DataFormat      string `json:"dataFormat"`
 		HideZeroBuckets bool   `json:"hideZeroBuckets"`
@@ -320,6 +326,7 @@ type (
 		YBucketBound  string   `json:"yBucketBound"`
 		YBucketNumber *float64 `json:"yBucketNumber"`
 		YBucketSize   *float64 `json:"yBucketSize"`
+		Options       Options  `json:"options"`
 	}
 	TimeseriesPanel struct {
 		Targets     []Target          `json:"targets,omitempty"`
