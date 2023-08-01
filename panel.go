@@ -335,9 +335,12 @@ type (
 		Show        *bool    `json:"showLegend,omitempty"`
 		DisplayMode string   `json:"displayMode"`
 		Placement   string   `json:"placement"`
+		SortBy      string   `json:"sortBy,omitempty"`
+		SortDesc    bool     `json:"sortDesc,omitempty"`
 	}
 	TimeseriesTooltipOptions struct {
 		Mode string `json:"mode"`
+		Sort string `json:"sort,omitempty"`
 	}
 	FieldConfigDefaults struct {
 		Unit       string            `json:"unit"`
