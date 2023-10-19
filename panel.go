@@ -621,6 +621,10 @@ type Target struct {
 		Operator string `json:"operator,omitempty"`
 		Value    string `json:"value,omitempty"`
 	} `json:"tags,omitempty"`
+
+	// For Azure Monitor
+	QueryType    string              `json:"queryType,omitempty"`
+	AzureMonitor *AzureMonitorTarget `json:"azureMonitor,omitempty"`
 }
 
 // StackdriverAlignOptions defines the list of alignment options shown in
@@ -639,6 +643,23 @@ type StackdriverAlignOption struct {
 	Text        string   `json:"text"`
 	Value       string   `json:"value"`
 	ValueTypes  []string `json:"valueTypes"`
+}
+
+type AzureMonitorTarget struct {
+	Aggregation     string                       `json:"aggregation"`
+	MetricName      string                       `json:"metricName"`
+	MetricNamespace string                       `json:"metricNamespace"`
+	Region          string                       `json:"region"`
+	Resources       []AzureMonitorTargetResource `json:"resources"`
+	TimeGrain       string                       `json:"timeGrain"`
+}
+
+type AzureMonitorTargetResource struct {
+	MetricNamespace string `json:"metricNamespace"`
+	Region          string `json:"region"`
+	ResourceGroup   string `json:"resourceGroup"`
+	ResourceName    string `json:"resourceName"`
+	Subscription    string `json:"subscription"`
 }
 
 type MapType struct {

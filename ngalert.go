@@ -71,6 +71,7 @@ type RelativeTimeRange struct {
 }
 
 type NgAlertQueryModel struct {
+	NgAlertQueryModelCustom
 	*NgAlertQueryModelQuery
 	*NgAlertQueryModelExpression
 }
@@ -82,8 +83,13 @@ func (m NgAlertQueryModel) MarshalJSON() ([]byte, error) {
 	if m.NgAlertQueryModelExpression != nil {
 		return json.Marshal(m.NgAlertQueryModelExpression)
 	}
+	if m.NgAlertQueryModelCustom != nil {
+		return json.Marshal(m.NgAlertQueryModelCustom)
+	}
 	return nil, errors.New("model is empty")
 }
+
+type NgAlertQueryModelCustom any
 
 type NgAlertQueryModelQuery struct {
 	EditorMode    string `json:"editorMode"` // default: code
