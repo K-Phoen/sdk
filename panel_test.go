@@ -25,6 +25,7 @@ import (
 	"testing"
 
 	"github.com/K-Phoen/sdk"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestStackVal_UnmarshalJSON_GotTrue(t *testing.T) {
@@ -264,6 +265,19 @@ func TestNewGraph(t *testing.T) {
 	if graph.Title != title {
 		t.Errorf("title should be %s but %s", title, graph.Title)
 	}
+}
+
+func TestNewPieChart(t *testing.T) {
+	assert := assert.New(t)
+	var title = "Sample Title"
+	piechart := sdk.NewPieChart(title)
+	assert.NotNil(piechart.PieChartPanel)
+	assert.Nil(piechart.GraphPanel)
+	assert.Nil(piechart.TextPanel)
+	assert.Nil(piechart.DashlistPanel)
+	assert.Nil(piechart.SinglestatPanel)
+	assert.Nil(piechart.LogsPanel)
+	assert.Equal(piechart.Title, title)
 }
 
 func TestNewTimeseries(t *testing.T) {
