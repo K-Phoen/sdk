@@ -628,6 +628,55 @@ type Target struct {
 		Operator string `json:"operator,omitempty"`
 		Value    string `json:"value,omitempty"`
 	} `json:"tags,omitempty"`
+
+	// Supports the updated query formtat for the stackdriver data source.
+	QueryType       string                      `json:"queryType,omitempty"`
+	TimeSeriesList  *StackdriverTimeSeriesList  `json:"timeSeriesList,omitempty"`
+	TimeSeriesQuery *StackdriverTimeSeriesQuery `json:"timeSeriesQuery,omitempty"`
+	PromQLQuery     *StackdriverPromQLQuery     `json:"promQLQuery,omitempty"`
+	SLOQuery        *StackdriverSLOQuery        `json:"sloQuery,omitempty"`
+}
+
+type StackdriverTimeSeriesList struct {
+	ProjectName                 string   `json:"projectName"`
+	CrossSeriesReducer          string   `json:"crossSeriesReducer,omitempty"`
+	AlignmentPeriod             string   `json:"alignmentPeriod,omitempty"`
+	PerSeriesAligner            string   `json:"perSeriesAligner,omitempty"`
+	GroupBys                    []string `json:"groupBys,omitempty"`
+	Filters                     []string `json:"filters,omitempty"`
+	View                        string   `json:"view,omitempty"`
+	Title                       string   `json:"title,omitempty"`
+	Text                        string   `json:"text,omitempty"`
+	SecondaryCrossSeriesReducer string   `json:"secondaryCrossSeriesReducer,omitempty"`
+	SecondaryAlignmentPeriod    string   `json:"secondaryAlignmentPeriod,omitempty"`
+	SecondaryPerSeriesAligner   string   `json:"secondaryPerSeriesAligner,omitempty"`
+	SecondaryGroupBys           []string `json:"secondaryGroupBys,omitempty"`
+	Preprocessor                string   `json:"preprocessor,omitempty"`
+}
+
+type StackdriverTimeSeriesQuery struct {
+	ProjectName string `json:"projectName,omitempty"`
+	Query       string `json:"query,omitempty"`
+	GraphPeriod string `json:"graphPeriod,omitempty"`
+}
+
+type StackdriverPromQLQuery struct {
+	ProjectName string `json:"projectName,omitempty"`
+	Expr        string `json:"expr,omitempty"`
+	Step        string `json:"step,omitempty"`
+}
+
+type StackdriverSLOQuery struct {
+	ProjectName      string `json:"projectName,omitempty"`
+	AlignmentPeriod  string `json:"alignmentPeriod,omitempty"`
+	PerSeriesAligner string `json:"perSeriesAligner,omitempty"`
+	AliasBy          string `json:"aliasBy,omitempty"`
+	SelectorName     string `json:"selectorName,omitempty"`
+	ServiceID        string `json:"serviceId,omitempty"`
+	ServiceName      string `json:"serviceName,omitempty"`
+	SLOID            string `json:"sloId,omitempty"`
+	SLOName          string `json:"sloName,omitempty"`
+	LookbackPeriod   string `json:"lookbackPeriod,omitempty"`
 }
 
 // StackdriverAlignOptions defines the list of alignment options shown in
