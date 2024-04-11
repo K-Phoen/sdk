@@ -629,15 +629,15 @@ type Target struct {
 		Value    string `json:"value,omitempty"`
 	} `json:"tags,omitempty"`
 
-	// Supports the updated query formtat for the stackdriver data source.
-	QueryType       string                      `json:"queryType,omitempty"`
-	TimeSeriesList  *StackdriverTimeSeriesList  `json:"timeSeriesList,omitempty"`
-	TimeSeriesQuery *StackdriverTimeSeriesQuery `json:"timeSeriesQuery,omitempty"`
-	PromQLQuery     *StackdriverPromQLQuery     `json:"promQLQuery,omitempty"`
-	SLOQuery        *StackdriverSLOQuery        `json:"sloQuery,omitempty"`
+	// Supports the updated query format for Google Cloud Monitoring (GCM) data sources.
+	QueryType       string              `json:"queryType,omitempty"`
+	TimeSeriesList  *GCMTimeSeriesList  `json:"timeSeriesList,omitempty"`
+	TimeSeriesQuery *GCMTimeSeriesQuery `json:"timeSeriesQuery,omitempty"`
+	PromQLQuery     *GCMPromQLQuery     `json:"promQLQuery,omitempty"`
+	SLOQuery        *GCMSLOQuery        `json:"sloQuery,omitempty"`
 }
 
-type StackdriverTimeSeriesList struct {
+type GCMTimeSeriesList struct {
 	ProjectName                 string   `json:"projectName"`
 	CrossSeriesReducer          string   `json:"crossSeriesReducer,omitempty"`
 	AlignmentPeriod             string   `json:"alignmentPeriod,omitempty"`
@@ -654,29 +654,30 @@ type StackdriverTimeSeriesList struct {
 	Preprocessor                string   `json:"preprocessor,omitempty"`
 }
 
-type StackdriverTimeSeriesQuery struct {
+type GCMTimeSeriesQuery struct {
 	ProjectName string `json:"projectName,omitempty"`
 	Query       string `json:"query,omitempty"`
 	GraphPeriod string `json:"graphPeriod,omitempty"`
 }
 
-type StackdriverPromQLQuery struct {
+type GCMPromQLQuery struct {
 	ProjectName string `json:"projectName,omitempty"`
 	Expr        string `json:"expr,omitempty"`
 	Step        string `json:"step,omitempty"`
 }
 
-type StackdriverSLOQuery struct {
-	ProjectName      string `json:"projectName,omitempty"`
-	AlignmentPeriod  string `json:"alignmentPeriod,omitempty"`
-	PerSeriesAligner string `json:"perSeriesAligner,omitempty"`
-	AliasBy          string `json:"aliasBy,omitempty"`
-	SelectorName     string `json:"selectorName,omitempty"`
-	ServiceID        string `json:"serviceId,omitempty"`
-	ServiceName      string `json:"serviceName,omitempty"`
-	SLOID            string `json:"sloId,omitempty"`
-	SLOName          string `json:"sloName,omitempty"`
-	LookbackPeriod   string `json:"lookbackPeriod,omitempty"`
+type GCMSLOQuery struct {
+	ProjectName      string   `json:"projectName,omitempty"`
+	AlignmentPeriod  string   `json:"alignmentPeriod,omitempty"`
+	PerSeriesAligner string   `json:"perSeriesAligner,omitempty"`
+	AliasBy          string   `json:"aliasBy,omitempty"`
+	SelectorName     string   `json:"selectorName,omitempty"`
+	ServiceID        string   `json:"serviceId,omitempty"`
+	ServiceName      string   `json:"serviceName,omitempty"`
+	SLOID            string   `json:"sloId,omitempty"`
+	SLOName          string   `json:"sloName,omitempty"`
+	LookbackPeriod   string   `json:"lookbackPeriod,omitempty"`
+	Goal             *float64 `json:"goal,omitempty"`
 }
 
 // StackdriverAlignOptions defines the list of alignment options shown in
