@@ -71,6 +71,12 @@ type AlertModel struct {
 
 	// For Stackdriver
 	MetricQuery *StackdriverAlertQuery `json:"metricQuery,omitempty"`
+
+	// For Cloudmonitoring.
+	TimeSeriesList  *GCMTimeSeriesList  `json:"timeSeriesList,omitempty"`
+	TimeSeriesQuery *GCMTimeSeriesQuery `json:"timeSeriesQuery,omitempty"`
+	PromQLQuery     *GCMPromQLQuery     `json:"promQLQuery,omitempty"`
+	SLOQuery        *GCMSLOQuery        `json:"sloQuery,omitempty"`
 }
 
 type StackdriverAlertQuery struct {
