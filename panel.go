@@ -41,6 +41,7 @@ const (
 	BarGaugeType
 	HeatmapType
 	TimeseriesType
+	PieChartType
 	LogsType
 	GaugeType
 )
@@ -52,6 +53,11 @@ type RepeatDirection string
 const (
 	RepeatDirectionVertical   RepeatDirection = "v"
 	RepeatDirectionHorizontal RepeatDirection = "h"
+)
+
+const (
+	PieChartLegendValuesValue   PieChartLegendValue = "value"
+	PieChartLegendValuesPercent PieChartLegendValue = "percent"
 )
 
 type (
@@ -72,6 +78,7 @@ type (
 		*BarGaugePanel
 		*HeatmapPanel
 		*TimeseriesPanel
+		*PieChartPanel
 		*LogsPanel
 		*GaugePanel
 		*CustomPanel
@@ -335,6 +342,39 @@ type (
 		Options     TimeseriesOptions `json:"options"`
 		FieldConfig FieldConfig       `json:"fieldConfig"`
 	}
+
+	PieChartPanel struct {
+		Targets     []Target        `json:"targets,omitempty"`
+		Options     PieChartOptions `json:"options"`
+		FieldConfig FieldConfig     `json:"fieldConfig"`
+	}
+
+	PieChartOptions struct {
+		ReduceOptions PieChartReduceOptions `json:"reduceOptions"`
+		PieType       string                `json:"pieType"`
+		Tooltip       PieChartTooltip       `json:"tooltip"`
+		Legend        PieChartLegend        `json:"legend"`
+	}
+	PieChartLegendValue string
+	PieChartLegend      struct {
+		ShowLegend  bool                  `json:"showLegend"`
+		DisplayMode string                `json:"displayMode"`
+		Placement   string                `json:"placement"`
+		Values      []PieChartLegendValue `json:"values"`
+		Calcs       []string              `json:"calcs"`
+	}
+
+	PieChartReduceOptions struct {
+		Values bool     `json:"values"`
+		Calcs  []string `json:"calcs"`
+		Fields string   `json:"fields"`
+	}
+
+	PieChartTooltip struct {
+		Mode string `json:"mode"` // todo types
+		Sort string `json:"sort"` // todo types
+	}
+
 	TimeseriesOptions struct {
 		Legend  TimeseriesLegendOptions  `json:"legend,omitempty"`
 		Tooltip TimeseriesTooltipOptions `json:"tooltip,omitempty"`
@@ -775,6 +815,34 @@ func NewTimeseries(title string) *Panel {
 	}
 }
 
+// NewPieChart initializes panel with a piechart panel.
+func NewPieChart(title string) *Panel {
+	if title == "" {
+		title = "Panel Title"
+	}
+
+	return &Panel{
+		CommonPanel: CommonPanel{
+			OfType: PieChartType,
+			Title:  title,
+			Type:   "piechart",
+			Span:   12,
+			IsNew:  true,
+		},
+		PieChartPanel: &PieChartPanel{
+			FieldConfig: FieldConfig{
+				Defaults: FieldConfigDefaults{
+					Color: FieldConfigColor{
+						Mode:       "palette-classic",
+						FixedColor: "green",
+						SeriesBy:   "last",
+					},
+				},
+			},
+		},
+	}
+}
+
 // NewLogs initializes a new panel as a Logs panel.
 func NewLogs(title string) *Panel {
 	if title == "" {
@@ -990,6 +1058,8 @@ func (p *Panel) ResetTargets() {
 		p.HeatmapPanel.Targets = nil
 	case TimeseriesType:
 		p.TimeseriesPanel.Targets = nil
+	case PieChartType:
+		p.PieChartPanel.Targets = nil
 	case LogsType:
 		p.LogsPanel.Targets = nil
 	case GaugeType:
@@ -1015,6 +1085,8 @@ func (p *Panel) AddTarget(t *Target) {
 		p.HeatmapPanel.Targets = append(p.HeatmapPanel.Targets, *t)
 	case TimeseriesType:
 		p.TimeseriesPanel.Targets = append(p.TimeseriesPanel.Targets, *t)
+	case PieChartType:
+		p.PieChartPanel.Targets = append(p.PieChartPanel.Targets, *t)
 	case LogsType:
 		p.LogsPanel.Targets = append(p.LogsPanel.Targets, *t)
 	case GaugeType:
@@ -1048,6 +1120,8 @@ func (p *Panel) SetTarget(t *Target) {
 		setTarget(t, &p.HeatmapPanel.Targets)
 	case TimeseriesType:
 		setTarget(t, &p.TimeseriesPanel.Targets)
+	case PieChartType:
+		setTarget(t, &p.PieChartPanel.Targets)
 	case LogsType:
 		setTarget(t, &p.LogsPanel.Targets)
 	case GaugeType:
@@ -1085,6 +1159,8 @@ func (p *Panel) RepeatDatasourcesForEachTarget(dsNames ...string) {
 		repeatDS(dsNames, &p.HeatmapPanel.Targets)
 	case TimeseriesType:
 		repeatDS(dsNames, &p.TimeseriesPanel.Targets)
+	case PieChartType:
+		repeatDS(dsNames, &p.PieChartPanel.Targets)
 	case LogsType:
 		repeatDS(dsNames, &p.LogsPanel.Targets)
 	case GaugeType:
@@ -1125,6 +1201,8 @@ func (p *Panel) RepeatTargetsForDatasources(dsNames ...string) {
 		repeatTarget(dsNames, &p.HeatmapPanel.Targets)
 	case TimeseriesType:
 		repeatTarget(dsNames, &p.TimeseriesPanel.Targets)
+	case PieChartType:
+		repeatTarget(dsNames, &p.PieChartPanel.Targets)
 	case LogsType:
 		repeatTarget(dsNames, &p.LogsPanel.Targets)
 	case GaugeType:
@@ -1150,6 +1228,8 @@ func (p *Panel) GetTargets() *[]Target {
 		return &p.HeatmapPanel.Targets
 	case TimeseriesType:
 		return &p.TimeseriesPanel.Targets
+	case PieChartType:
+		return &p.PieChartPanel.Targets
 	case LogsType:
 		return &p.LogsPanel.Targets
 	case GaugeType:
@@ -1227,6 +1307,12 @@ func (p *Panel) UnmarshalJSON(b []byte) error {
 		p.OfType = TimeseriesType
 		if err = json.Unmarshal(b, &timeseries); err == nil {
 			p.TimeseriesPanel = &timeseries
+		}
+	case "piechart":
+		var piechart PieChartPanel
+		p.OfType = PieChartType
+		if err = json.Unmarshal(b, &piechart); err == nil {
+			p.PieChartPanel = &piechart
 		}
 	case "logs":
 		var logs LogsPanel
@@ -1335,6 +1421,12 @@ func (p *Panel) MarshalJSON() ([]byte, error) {
 			TimeseriesPanel
 		}{p.CommonPanel, *p.TimeseriesPanel}
 		return json.Marshal(outTimeseries)
+	case PieChartType:
+		var outPieChart = struct {
+			CommonPanel
+			PieChartPanel
+		}{p.CommonPanel, *p.PieChartPanel}
+		return json.Marshal(outPieChart)
 	case LogsType:
 		var outLogs = struct {
 			CommonPanel
