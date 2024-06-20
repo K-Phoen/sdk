@@ -24,14 +24,12 @@ type Alert struct {
 	Interval string      `json:"interval"`
 	Rules    []AlertRule `json:"rules"`
 }
-
 type AlertRule struct {
 	For          string            `json:"for"`
 	GrafanaAlert *GrafanaAlert     `json:"grafana_alert,omitempty"`
 	Annotations  map[string]string `json:"annotations,omitempty"`
 	Labels       map[string]string `json:"labels,omitempty"`
 }
-
 type GrafanaAlert struct {
 	Title               string       `json:"title"`
 	Condition           string       `json:"condition"`
@@ -39,7 +37,6 @@ type GrafanaAlert struct {
 	ExecutionErrorState string       `json:"exec_err_state,omitempty"`
 	Data                []AlertQuery `json:"data"`
 }
-
 type AlertQuery struct {
 	RefID             string                  `json:"refId"`
 	QueryType         string                  `json:"queryType"`
@@ -47,12 +44,10 @@ type AlertQuery struct {
 	DatasourceUID     string                  `json:"datasourceUid"`
 	Model             AlertModel              `json:"model"`
 }
-
 type AlertRelativeTimeRange struct {
 	From int `json:"from"` // seconds
 	To   int `json:"to"`   // seconds
 }
-
 type AlertModel struct {
 	RefID        string             `json:"refId,omitempty"`
 	QueryType    string             `json:"queryType,omitempty"`
@@ -65,16 +60,29 @@ type AlertModel struct {
 	IntervalMs   int                `json:"intervalMs,omitempty"`
 	Hide         *bool              `json:"hide,omitempty"`
 	Conditions   []AlertCondition   `json:"conditions,omitempty"`
-
 	// For Graphite
 	Target string `json:"target,omitempty"`
-
 	// For Stackdriver
 	MetricQuery *StackdriverAlertQuery `json:"metricQuery,omitempty"`
+	// For Cloudwatch
+	Dimensions       map[string]string `json:"dimensions,omitempty"`
+	Expression       string            `json:"expression,omitempty"`
+	Id               string            `json:"ids,omitempty"`
+	Label            string            `json:"label,omitempty"`
+	MatchExact       *bool             `json:"matchExact,omitempty"`
+	MaxDataPoints    int               `json:"maxDataPoints,omitempty"`
+	MetricEditorMode int               `json:"metricEditorMode,omitempty"`
+	MetricName       string            `json:"metricName,omitempty"`
+	MetricQueryType  int               `json:"metricQueryType,omitempty"`
+	Namespace        string            `json:"namespace,omitempty"`
+	Period           string            `json:"period,omitempty"`
+	QueryMode        string            `json:"queryMode,omitempty"`
+	Region           string            `json:"region,omitempty"`
+	SqlExpression    string            `json:"sqlExpression,omitempty"`
+	Statistic        string            `json:"statistic,omitempty"`
 }
 
 type StackdriverAlertQuery struct {
-	ProjectName        string                    `json:"projectName,omitempty"`
 	AlignOptions       []StackdriverAlignOptions `json:"alignOptions,omitempty"`
 	AliasBy            string                    `json:"aliasBy,omitempty"`
 	MetricType         string                    `json:"metricType,omitempty"`
@@ -86,13 +94,12 @@ type StackdriverAlertQuery struct {
 	ValueType          string                    `json:"valueType,omitempty"`
 	Preprocessor       string                    `json:"preprocessor,omitempty"`
 	GroupBys           []string                  `json:"groupBys,omitempty"`
+	ProjectName        string                    `json:"projectName,omitempty"`
 }
-
 type AlertDatasourceRef struct {
 	UID  string `json:"uid"`
 	Type string `json:"type"`
 }
-
 type AlertCondition struct {
 	Type      string                 `json:"type,omitempty"`
 	Evaluator AlertEvaluator         `json:"evaluator,omitempty"`
@@ -107,11 +114,9 @@ type AlertEvaluator struct {
 	Params []float64 `json:"params,omitempty"`
 	Type   string    `json:"type,omitempty"`
 }
-
 type AlertOperator struct {
 	Type string `json:"type,omitempty"`
 }
-
 type AlertReducer struct {
 	Params []string `json:"params,omitempty"`
 	Type   string   `json:"type,omitempty"`
